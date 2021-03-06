@@ -1,0 +1,9 @@
+channels = ["#my_twitch_channel"]
+nickname = "my_twitch_bot_account"
+password = "oauth:abcdefghijklmnop1234567890"
+server = "irc.chat.twitch.tv"
+
+[seika]
+url = "http://localhost:7180"
+username = "SeikaServerUser"
+password = "SeikaServerPassword"
