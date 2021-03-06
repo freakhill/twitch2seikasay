@@ -16,8 +16,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Build
-      run: cargo build --verbose --release && strip target/release/twitch2seikasay && mv target/release/twitch2seikasay target/release/twitch2seikasay_amd64
+      run: cargo build --verbose --release && strip target/release/twitch2seikasay && mv target/release/twitch2seikasay target/release/twitch2seikasay_amd64 && mv Config.toml.sample Config.toml
+    
+    - name: Run tests
+      run: cargo test --verbose
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          target/release/twitch2seikasay_amd64
+          Config.toml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
   build-win:
 
@@ -25,11 +39,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Build
-      run: cargo build --verbose --release
+      run: cargo build --verbose --release && mv Config.toml.sample Config.toml
       
     - name: Run tests
       run: cargo test --verbose
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          target/release/twitch2seikasay.exe
+          Config.toml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
   build-mac:
 
@@ -38,8 +63,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: cargo build --verbose --release
+      run: cargo build --verbose --release && strip target/release/twitch2seikasay && mv target/release/twitch2seikasay target/release/twitch2seikasay_darwin && mv Config.toml.sample Config.toml
       
     - name: Run tests
       run: cargo test --verbose
       
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          target/release/twitch2seikasay_darwin
+          Config.toml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
